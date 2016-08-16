@@ -6,4 +6,4 @@ python:
 install: "pip install -r dependencies.txt"
 
 # command to run tests
-script: tests
+script: tests.py
