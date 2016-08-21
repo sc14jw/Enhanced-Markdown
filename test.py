@@ -1,24 +1,14 @@
 import sys
-from Compiler import Compiler
+from DefaultCompiler import DefaultCompiler
 
 if __name__ == '__main__':
 
+    inputText = ""
+    with open("test.md", "r") as inputFile:
+        inputText = inputFile.read()
 
-    if(len(sys.argv) < 3):
-        print("incorrect usage, correct usage: python3 test.py <markdown> <filename>")
+    compiler = DefaultCompiler(None)
+    outputText = compiler.compile(inputText)
 
-
-    print("markdown file = " + sys.argv[1])
-
-    markdownCode = ""
-
-    with open(sys.argv[1]) as inputFile:
-        markdownCode = inputFile.read()
-
-    print("markdownCode = \n" + markdownCode)
-
-    compiler = Compiler()
-    output = compiler.compile(markdownCode)
-
-    with open(sys.argv[2], "w") as outputFile:
-        outputFile.write(output)
+    with open("test.html", "w") as outputFile:
+        outputFile.write(outputText)
