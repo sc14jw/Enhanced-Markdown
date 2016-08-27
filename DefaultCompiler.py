@@ -47,6 +47,13 @@ class DefaultCompiler(Compiler):
                 htmlTag = "h" + str(titleLevel) + ">"
                 html += "<" + htmlTag + newLine + "</" + htmlTag
 
+            elif line[0] == "-" and line[1] == "-" and line[2] == "-":
+
+                html = self.checkOrderedListRunning(html)
+                html = self.checkUnorderedListRunning(html)
+
+                html += "</hr>"
+
             elif line[0] == "-":
 
                 html = self.checkOrderedListRunning(html)

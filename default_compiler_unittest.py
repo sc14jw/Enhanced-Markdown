@@ -26,5 +26,10 @@ class TestDefaultCompiler   (unittest.TestCase):
 
         self.assertEqual("<ul><li>this is a test</li>", output)
 
+    def test_horizontalRule(self):
+        output = self.compiler.compile("---")
+
+        self.assertEqual("</hr>", output)
+
 if __name__ == '__main__':
     unittest.main()
