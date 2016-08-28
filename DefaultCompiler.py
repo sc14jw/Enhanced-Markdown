@@ -25,12 +25,17 @@ class DefaultCompiler(Compiler):
         return html
 
 
+    ''' complete a given module command '''
+    def __moduleCommand(self, text):
+        for module in modules:
+            module.completeCommand(text)
+
+
     ''' compile some text to from markdown to html '''
     def compile(self, text):
         html = ""
 
         textArray = text.split("\n")
-        #print("textArray = " + str(textArray))
 
         for line in textArray:
             if(line == ""):
@@ -77,6 +82,9 @@ class DefaultCompiler(Compiler):
                 html += "<li>" + newLine + "</li>"
 
                 self.__ordererdListRunning = True
+
+            elif "@" in line:
+                __moduleCommand(line)
 
             else:
 
