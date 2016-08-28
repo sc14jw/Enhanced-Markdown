@@ -2,24 +2,24 @@ from Compiler import Compiler
 
 ''' Default implementation of the Compiler abstract class '''
 class DefaultCompiler(Compiler):
-    unorderedListRunning = False
-    ordererdListRunning = False
+    __unorderedListRunning = False
+    __ordererdListRunning = False
 
 
     ''' method to check if a unordered list tag is currently open '''
-    def checkUnorderedListRunning(self, html):
-        if(self.unorderedListRunning):
+    def __checkUnorderedListRunning(self, html):
+        if(self.__unorderedListRunning):
             html += "</ul>"
-            self.unorderedListRunning = False
+            self.__unorderedListRunning = False
             return html
 
         return html
 
     ''' method to check if an orderered list tag is currently open '''
-    def checkOrderedListRunning(self, html):
-        if(self.ordererdListRunning):
+    def __checkOrderedListRunning(self, html):
+        if(self.__ordererdListRunning):
             html += "</ol>"
-            self.ordererdListRunning = False
+            self.__ordererdListRunning = False
             return html
 
         return html
@@ -38,8 +38,8 @@ class DefaultCompiler(Compiler):
 
             if line[0] == "#":
 
-                html = self.checkUnorderedListRunning(html);
-                html = self.checkOrderedListRunning(html);
+                html = self.__checkUnorderedListRunning(html);
+                html = self.__checkOrderedListRunning(html);
 
                 titleLevel = line.count("#")
                 newLine = line.replace("#","")
@@ -49,39 +49,39 @@ class DefaultCompiler(Compiler):
 
             elif line[0] == "-" and line[1] == "-" and line[2] == "-":
 
-                html = self.checkOrderedListRunning(html)
-                html = self.checkUnorderedListRunning(html)
+                html = self.__checkOrderedListRunning(html)
+                html = self.__checkUnorderedListRunning(html)
 
                 html += "</hr>"
 
             elif line[0] == "-":
 
-                html = self.checkOrderedListRunning(html)
+                html = self.__checkOrderedListRunning(html)
 
-                if(not self.unorderedListRunning):
+                if(not self.__unorderedListRunning):
                     html += "<ul>"
 
                 newLine = line.replace("-", "")
                 html += "<li>" + newLine + "</li>"
 
-                self.unorderedListRunning = True
+                self.__unorderedListRunning = True
 
             elif line[0] == "." and line[1] == ".":
 
-                html = self.checkUnorderedListRunning(html)
+                html = self.__checkUnorderedListRunning(html)
 
-                if(not self.ordererdListRunning):
+                if(not self.__ordererdListRunning):
                     html += "<ol>"
 
                 newLine = line[2:]
                 html += "<li>" + newLine + "</li>"
 
-                self.ordererdListRunning = True
+                self.__ordererdListRunning = True
 
             else:
 
-                html = self.checkUnorderedListRunning(html)
-                html = self.checkOrderedListRunning(html)
+                html = self.__checkUnorderedListRunning(html)
+                html = self.__checkOrderedListRunning(html)
 
                 html += "<p>" + line + "</p>"
 
