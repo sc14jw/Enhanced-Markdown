@@ -1,4 +1,4 @@
-from Compiler import Compiler
+from Compilers.Compiler import Compiler
 
 ''' Default implementation of the Compiler abstract class '''
 class DefaultCompiler(Compiler):

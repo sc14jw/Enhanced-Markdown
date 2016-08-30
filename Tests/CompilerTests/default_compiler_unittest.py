@@ -1,6 +1,9 @@
 import unittest
+import sys
 
-from DefaultCompiler import DefaultCompiler
+sys.path.append(".")
+
+from Compilers.DefaultCompiler import DefaultCompiler
 
 class TestDefaultCompiler   (unittest.TestCase):
 
