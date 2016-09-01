@@ -3,4 +3,4 @@ python:
   - "3.5"
 
 # command to run tests
-script: "python Tests/Compilers/default_compiler_unittest.py"
+script: "python Tests/CompilerTests/default_compiler_unittest.py"
