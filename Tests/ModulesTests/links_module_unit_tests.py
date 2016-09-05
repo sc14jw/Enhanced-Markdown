@@ -17,24 +17,43 @@ class TestLinksModule(unittest.TestCase):
         " paramatised with [] to alter link text"}
         output = self.module.getCommands()
 
-        print("output = " + str(output))
-
-        self.assertEquals(expectedOutput, output)
-
-    def test_noCommand(self):
-
-        self.assertEquals(None, self.module.completeCommand("test"))
+        self.assertEqual(expectedOutput, output)
 
     def test_CommandNoParams(self):
 
         expectedOutput = '<a href="www.test.com">www.test.com</a>'
 
-        self.assertEquals(expectedOutput, self.module.completeCommand("@link(www.test.com)"))
+        self.assertEqual(expectedOutput, self.module.completeCommand("@link(www.test.com)"))
 
     def test_CommandWithParams(self):
 
         expectedOutput = '<a href="www.test.com">test</a>'
-        self.assertEquals(expectedOutput, self.module.completeCommand("@link(www.test.com)[test]"))
+        self.assertEqual(expectedOutput, self.module.completeCommand("@link(www.test.com)[test]"))
+
+    def test_NoModuleCommand(self):
+
+        expectedOutput = "test"
+        output = self.module.completeCommand(expectedOutput)
+
+        print("output = " + output)
+
+        self.assertEqual("test", output)
+
+    def test_WrongModuleCommand(self):
+
+        expectedOutput = "@test(this is a test) to be honest"
+        self.assertEqual(expectedOutput, self.module.completeCommand(expectedOutput))
+
+
+    def test_MultipleLinkCommands(self):
+
+        expectedOutput = str('<a href="www.test.com">this is a test</a> and so is this'
+        + ' <a href="www.google.com">www.google.com</a>')
+
+        output = self.module.completeCommand("@link(www.test.com)[this is a test]" +
+        " and so is this @link(www.google.com)")
+
+        self.assertEqual(expectedOutput, output)
 
 
 if __name__ == '__main__':

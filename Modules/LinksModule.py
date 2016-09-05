@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append(".")
+
 from Modules.Module import Module
 
 ''' Module to handle links with @link command '''
@@ -8,13 +12,11 @@ class LinksModule(Module):
 
     def completeCommand(self, text):
 
-        html = ""
-
         if not (isinstance(text, str)):
             raise AttributeError("text is not a string")
 
         if not "@" in text:
-            return
+            return text
 
         commands = text.split("@")
 
@@ -40,6 +42,6 @@ class LinksModule(Module):
 
 if __name__ == '__main__':
     module = LinksModule()
-    output = module.getCommands()
+    output = module.completeCommand("test")
 
     print("output = " + str(output))
