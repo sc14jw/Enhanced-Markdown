@@ -40,3 +40,21 @@ class Compiler:
             text = module.completeCommand(text)
 
         return text
+
+    ''' return the modules currently in use by a Compiler object - might return None '''
+    def getModules(self):
+
+        return self.modules
+
+    ''' return the module commands currently supported by a given Compiler object
+        as a list - might return None if no modules were added to the compiler '''
+    def getModuleCommands(self):
+
+        if self.modules == None
+            return None
+
+        commands = []
+
+        for module in self.modules:
+
+            commands.append(module.getCommands())
