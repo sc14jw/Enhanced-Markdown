@@ -1,7 +1,7 @@
 import sys
 sys.path.append(".")
 
-from Modules import Module
+from Modules.Module import Module
 
 ''' Generic Compiler class '''
 class Compiler:
@@ -27,6 +27,20 @@ class Compiler:
         else:
 
             self.modules.append(module)
+
+
+    ''' remove a module from the compiler '''
+    def removeModule(self, module):
+
+        if not isinstance(module, Module):
+            raise AttributeError("module does not inherit Module")
+
+        if self.modules == None:
+            return
+
+        else:
+            self.modules.remove(module)
+
 
 
     ''' complete a given module command '''
