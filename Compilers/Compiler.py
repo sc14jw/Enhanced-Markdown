@@ -38,6 +38,9 @@ class Compiler:
         if self.modules == None:
             return
 
+        elif not module in self.modules:
+            return
+
         else:
             self.modules.remove(module)
 
