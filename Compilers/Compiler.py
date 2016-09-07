@@ -13,7 +13,7 @@ class Compiler:
     def compile(self, text):
         pass
 
-    ''' add a module to the Compiler '''
+    ''' add a module to the Compiler - raises AttributeError if module isn't a Module '''
     def addModule(self, module):
 
         if not isinstance(module, Module):
@@ -29,7 +29,7 @@ class Compiler:
             self.modules.append(module)
 
 
-    ''' remove a module from the compiler '''
+    ''' remove a module from the compiler - raises AttributeError if module isn't a Module '''
     def removeModule(self, module):
 
         if not isinstance(module, Module):
@@ -75,3 +75,5 @@ class Compiler:
         for module in self.modules:
 
             commands.append(module.getCommands())
+
+        return commands
