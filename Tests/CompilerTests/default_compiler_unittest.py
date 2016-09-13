@@ -20,14 +20,14 @@ class TestDefaultCompiler   (unittest.TestCase):
         self.assertEqual("<h2>this is a test</h2>", output)
 
     def test_numberedList(self):
-        output = self.compiler.compile("..this is a test")
+        output = self.compiler.compile("*..\n..this is a test\n..*")
 
-        self.assertEqual("<ol><li>this is a test</li>", output)
+        self.assertEqual("<ol><li>this is a test</li></ol>", output)
 
     def test_unOrderedList(self):
-        output = self.compiler.compile("-this is a test")
+        output = self.compiler.compile("*-\n-this is a test\n-*")
 
-        self.assertEqual("<ul><li>this is a test</li>", output)
+        self.assertEqual("<ul><li>this is a test</li></ul>", output)
 
     def test_horizontalRule(self):
         output = self.compiler.compile("---")
