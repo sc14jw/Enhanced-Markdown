@@ -1,4 +1,4 @@
 class PdfGenerator:
-    def generatePdf(text):
+    def generatePdf(filename,text):
 
         raise NotImplemented("Please use an extension of PdfGenerator")
