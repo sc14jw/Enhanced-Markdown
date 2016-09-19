@@ -15,26 +15,19 @@ class LinksModule(Module):
         if not (isinstance(text, str)):
             raise AttributeError("text is not a string")
 
-        if not "@" in text:
-            return text
+        if command[0:4] == "link":
 
-        commands = text.split("@")
+            link = command[5:command.find(")")]
 
-        for command in commands:
+            linkText = command[7 + len(link):command.find("]")]
 
-            if command[0:4] == "link":
+            if not linkText == "":
+                html = "<a href=\"" + link + "\">" + linkText + "</a>"
+                text = text.replace("@link(" + link + ")[" + linkText + "]", html)
 
-                link = command[5:command.find(")")]
-
-                linkText = command[7 + len(link):command.find("]")]
-
-                if not linkText == "":
-                    html = "<a href=\"" + link + "\">" + linkText + "</a>"
-                    text = text.replace("@link(" + link + ")[" + linkText + "]", html)
-
-                else:
-                    html = "<a href=\"" + link + "\">" + link + "</a>"
-                    text = text.replace("@link(" + link + ")", html)
+            else:
+                html = "<a href=\"" + link + "\">" + link + "</a>"
+                text = text.replace("@link(" + link + ")", html)
 
         return text
 
