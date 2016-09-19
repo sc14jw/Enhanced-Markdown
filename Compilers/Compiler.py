@@ -9,6 +9,9 @@ class Compiler:
     def __init__(self, manager):
         self.manager = manager
 
+        if manager == None:
+            self.manager = ModuleManager()
+
     ''' compile a piece of test
         should return a String representing compiled text '''
     def compile(self, text):
@@ -63,5 +66,8 @@ class Compiler:
     ''' return the module commands currently supported by a given Compiler object
         as a list - might return None if no modules were added to the compiler '''
     def getModuleCommands(self):
+
+        if self.manager == None:
+            return None
 
         return self.manager.getModuleCommands()

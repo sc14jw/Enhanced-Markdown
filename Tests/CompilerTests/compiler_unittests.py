@@ -5,6 +5,7 @@ sys.path.append(".")
 
 from Modules.LinksModule import LinksModule
 from Compilers.Compiler import Compiler
+from Modules.ModuleManager import ModuleManager
 
 class TestCompiler(unittest.TestCase):
 
@@ -19,7 +20,7 @@ class TestCompiler(unittest.TestCase):
 
         expected = [module]
 
-        self.assertEqual(expected, self.compiler.modules)
+        self.assertEqual(expected, self.compiler.manager.getModules())
 
     def test_AddModuleWrongAttributeType(self):
 
@@ -31,15 +32,15 @@ class TestCompiler(unittest.TestCase):
 
         module = LinksModule()
 
-        self.compiler.modules = [module]
+        self.compiler.manager = ModuleManager([module])
         self.compiler.removeModule(module)
 
-        self.assertEqual([], self.compiler.modules)
+        self.assertEqual([], self.compiler.manager.getModules())
 
     def test_RemoveModuleNoneModulesList(self):
 
         self.compiler.removeModule(LinksModule())
-        self.assertEqual(None, self.compiler.modules)
+        self.assertEqual(None, self.compiler.manager.getModules())
 
     def test_RemoveModuleModuleEmptyList(self):
 
@@ -65,7 +66,7 @@ class TestCompiler(unittest.TestCase):
     def test_GetModuleCommands(self):
 
         module = LinksModule()
-        self.compiler.modules = [module]
+        self.compiler.manager = ModuleManager([module])
 
         self.assertEqual([module.getCommands()], self.compiler.getModuleCommands())
 
@@ -75,7 +76,7 @@ class TestCompiler(unittest.TestCase):
 
     def test_GetModuleCommandsEmptyModules(self):
 
-        self.compiler.modules = []
+        self.compiler.manager = ModuleManager([])
 
         self.assertEqual([], self.compiler.getModuleCommands())
 
