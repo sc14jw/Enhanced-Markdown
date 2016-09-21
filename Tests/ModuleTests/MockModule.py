@@ -3,7 +3,7 @@ from Modules.Module import Module
 ''' Mock module implementation to test functionality '''
 class MockModule(Module):
 
-    def getCommand(self):
+    def getCommands(self):
         return {"test":"this is a test module to test functionality"}
 
     def completeCommand(self,command):
