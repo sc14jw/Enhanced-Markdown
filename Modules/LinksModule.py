@@ -10,9 +10,9 @@ class LinksModule(Module):
     def getCommands(self):
         return {"link" : "add a link into the document - can be optionally paramatised with [] to alter link text"}
 
-    def completeCommand(self, text):
+    def completeCommand(self, command):
 
-        if not (isinstance(text, str)):
+        if not (isinstance(command, str)):
             raise AttributeError("text is not a string")
 
         if command[0:4] == "link":
@@ -23,13 +23,13 @@ class LinksModule(Module):
 
             if not linkText == "":
                 html = "<a href=\"" + link + "\">" + linkText + "</a>"
-                text = text.replace("@link(" + link + ")[" + linkText + "]", html)
+                command = command.replace("link(" + link + ")[" + linkText + "]", html)
 
             else:
                 html = "<a href=\"" + link + "\">" + link + "</a>"
-                text = text.replace("@link(" + link + ")", html)
+                command = command.replace("link(" + link + ")", html)
 
-        return text
+        return command
 
 
 

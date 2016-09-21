@@ -23,12 +23,12 @@ class TestLinksModule(unittest.TestCase):
 
         expectedOutput = '<a href="www.test.com">www.test.com</a>'
 
-        self.assertEqual(expectedOutput, self.module.completeCommand("@link(www.test.com)"))
+        self.assertEqual(expectedOutput, self.module.completeCommand("link(www.test.com)"))
 
     def test_CommandWithParams(self):
 
         expectedOutput = '<a href="www.test.com">test</a>'
-        self.assertEqual(expectedOutput, self.module.completeCommand("@link(www.test.com)[test]"))
+        self.assertEqual(expectedOutput, self.module.completeCommand("link(www.test.com)[test]"))
 
     def test_NoModuleCommand(self):
 
@@ -43,17 +43,6 @@ class TestLinksModule(unittest.TestCase):
 
         expectedOutput = "@test(this is a test) to be honest"
         self.assertEqual(expectedOutput, self.module.completeCommand(expectedOutput))
-
-
-    def test_MultipleLinkCommands(self):
-
-        expectedOutput = str('<a href="www.test.com">this is a test</a> and so is this'
-        + ' <a href="www.google.com">www.google.com</a>')
-
-        output = self.module.completeCommand("@link(www.test.com)[this is a test]" +
-        " and so is this @link(www.google.com)")
-
-        self.assertEqual(expectedOutput, output)
 
 
 if __name__ == '__main__':
