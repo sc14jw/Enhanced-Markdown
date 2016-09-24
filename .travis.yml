@@ -7,3 +7,4 @@ script:
   - "python Tests/CompilerTests/default_compiler_unittest.py"
   - "python Tests/ModuleTests/links_module_unit_tests.py"
   - "python Tests/CompilerTests/compiler_unittests.py"
+  - "python Tests/ModuleTests/module_manager_unit_tests.py"
