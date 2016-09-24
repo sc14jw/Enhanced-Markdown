@@ -48,13 +48,47 @@ class ModuleManager:
 
         commands = text.split("@")
 
-        for command in commands:
+        if not self._modules:
+            return text
+
+        newText = ""
+
+        for commandLine in commands:
+
+            # Check if the commandLine has optional parameters
+            if commandLine.find(']') == -1:
+                # Check that the commandLine actually contains a completeCommand
+                if commandLine.find(')') == -1:
+                    continue
+
+                command = commandLine[0:commandLine.find(')') + 1]
+
+            else:
+                command = commandLine[0:commandLine.find(']') + 1]
+
+            output = ""
 
             for module in self._modules:
 
-                text = module.completeCommand(command)
+                moduleCommands = list(module.getCommands().keys())
+
+                # Check a given module is able to handle the command before handing it the command
+                if command[:command.find('(')] in moduleCommands:
+                    output = module.completeCommand(command)
+                    break
+
+            # Check that we actually have some output - actually had a module to handle given command
+            if not output:
+                newText += commandLine
+
+            else:
+                newText += commandLine.replace(command, output)
 
 
+        if newText:
+            text = newText
+
+        text = text.replace("\\@", "@")
         return text
 
     ''' return the modules currently in use by a Manager object - might return None '''
