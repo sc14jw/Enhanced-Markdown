@@ -2,11 +2,15 @@ import sys
 sys.path.append(".")
 
 from Modules.Module import Module
+from Modules.ModuleManager import ModuleManager
 
 ''' Generic Compiler class '''
 class Compiler:
-    def __init__(self, modules):
-        self.modules = modules
+    def __init__(self, manager):
+        self.manager = manager
+
+        if manager == None:
+            self.manager = ModuleManager()
 
     ''' compile a piece of test
         should return a String representing compiled text '''
@@ -19,14 +23,14 @@ class Compiler:
         if not isinstance(module, Module):
             raise AttributeError("module does not inherit Module")
 
-        if self.modules == None:
+        if self.manager == None:
 
-            self.modules = []
-            self.modules.append(module)
+            self.manager = ModuleManager();
+            self.manager.addModule(module)
 
         else:
 
-            self.modules.append(module)
+            self.manager.addModule(module)
 
 
     ''' remove a module from the compiler - raises AttributeError if module isn't a Module '''
@@ -35,45 +39,35 @@ class Compiler:
         if not isinstance(module, Module):
             raise AttributeError("module does not inherit Module")
 
-        if self.modules == None:
-            return
-
-        elif not module in self.modules:
+        if self.manager == None:
             return
 
         else:
-            self.modules.remove(module)
+            self.manager.removeModule(module)
 
 
 
-    ''' complete a given module command '''
+    ''' complete a given module command - may raise an AttributeError if text
+        isn't a string '''
     def moduleCommand(self, text):
 
-        if self.modules == None:
-            return text
+        if not (isinstance(text, str)):
+            raise AttributeError("text is not a string")
 
-        for module in self.modules:
-
-            text = module.completeCommand(text)
+        text = self.manager.moduleCommand(text)
 
         return text
 
     ''' return the modules currently in use by a Compiler object - might return None '''
     def getModules(self):
 
-        return self.modules
+        return self.manager.getModules()
 
     ''' return the module commands currently supported by a given Compiler object
         as a list - might return None if no modules were added to the compiler '''
     def getModuleCommands(self):
 
-        if self.modules == None:
+        if self.manager == None:
             return None
 
-        commands = []
-
-        for module in self.modules:
-
-            commands.append(module.getCommands())
-
-        return commands
+        return self.manager.getModuleCommands()
