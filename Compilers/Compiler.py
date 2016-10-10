@@ -9,7 +9,7 @@ class Compiler:
     def __init__(self, manager):
         self.manager = manager
 
-        if manager == None:
+        if not self.manager:
             self.manager = ModuleManager()
 
     ''' compile a piece of test
@@ -23,14 +23,10 @@ class Compiler:
         if not isinstance(module, Module):
             raise AttributeError("module does not inherit Module")
 
-        if self.manager == None:
-
+        if not self.manager:
             self.manager = ModuleManager();
-            self.manager.addModule(module)
 
-        else:
-
-            self.manager.addModule(module)
+        self.manager.addModule(module)
 
 
     ''' remove a module from the compiler - raises AttributeError if module isn't a Module '''
@@ -39,7 +35,7 @@ class Compiler:
         if not isinstance(module, Module):
             raise AttributeError("module does not inherit Module")
 
-        if self.manager == None:
+        if not self.manager:
             return
 
         else:
@@ -67,7 +63,7 @@ class Compiler:
         as a list - might return None if no modules were added to the compiler '''
     def getModuleCommands(self):
 
-        if self.manager == None:
+        if not self.manager:
             return None
 
         return self.manager.getModuleCommands()

@@ -101,12 +101,8 @@ class ModuleManager:
     def getModuleCommands(self):
 
         if self._modules == None:
-            return None
-
-        commands = []
-
-        for module in self._modules:
-
-            commands.append(module.getCommands())
+            commands = None
+        else:
+            commands = [module.getCommands() for module in self._modules]
 
         return commands
