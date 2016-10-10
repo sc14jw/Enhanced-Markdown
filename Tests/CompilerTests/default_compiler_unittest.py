@@ -32,7 +32,7 @@ class TestDefaultCompiler   (unittest.TestCase):
     def test_horizontalRule(self):
         output = self.compiler.compile("---")
 
-        self.assertEqual("</hr>", output)
+        self.assertEqual("<hr>", output)
 
 if __name__ == '__main__':
     unittest.main()

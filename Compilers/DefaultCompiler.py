@@ -1,5 +1,8 @@
 from Compilers.Compiler import Compiler
 
+COMPILER_COMMANDS = {"*-" : "<ul>", "-*" : "</ul>", "*.." : "<ol>", "..*" : "</ol>",
+                     "---" : "<hr>"}
+
 ''' Default implementation of the Compiler abstract class '''
 class DefaultCompiler(Compiler):
 
@@ -15,6 +18,18 @@ class DefaultCompiler(Compiler):
 
             line = super().moduleCommand(line)
 
+            found = False
+
+            for command in COMPILER_COMMANDS:
+
+                if line[0:len(command)] == command:
+                    html += COMPILER_COMMANDS[command]
+                    found = True
+                    break
+
+            if found:
+                continue
+
             if line[0] == "#":
 
                 titleLevel = line.count("#")
@@ -23,21 +38,6 @@ class DefaultCompiler(Compiler):
                 htmlTag = "h" + str(titleLevel) + ">"
                 html += "<" + htmlTag + newLine + "</" + htmlTag
 
-            elif line[0] == "*" and line[1] == "-":
-                html += "<ul>"
-
-            elif line[0] == "-" and line[1] == "*":
-                html += "</ul>"
-
-            elif line[0] == "*" and line[1] == "." and line[2] == ".":
-                html += "<ol>"
-
-            elif line[0] == "." and line[1] == "." and line[2] == "*":
-                html += "</ol>"
-
-            elif line[0] == "-" and line[1] == "-" and line[2] == "-":
-
-                html += "</hr>"
 
             elif line[0] == "-":
 
@@ -45,7 +45,7 @@ class DefaultCompiler(Compiler):
                 html += "<li>" + newLine + "</li>"
 
 
-            elif line[0] == "." and line[1] == ".":
+            elif line[0:2] == "..":
 
                 newLine = line[2:]
                 html += "<li>" + newLine + "</li>"
