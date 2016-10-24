@@ -5,7 +5,7 @@ class ClassLoader:
     def importClass(name):
         ''' import return an instance of a class with passed in name - name should be the fully qualified
             name of required class including module '''
-
+            
         if not isinstance(name, str):
             raise AttributeError("name must be a string")
 
