@@ -29,9 +29,9 @@ class MarkdownToPdf:
 
             self.filename = data["moduleFile"]
 
-            self.compiler = ClassLoader.importClass(data["compiler"])
+            self.compiler = ClassLoader.importClass(data["compiler"])()
 
-            self.pdfGenerator = ClassLoader.importClass(data["generator"])
+            self.pdfGenerator = ClassLoader.importClass(data["generator"])()
 
 
     def loadModuleNames(self, filename="modules.json"):
@@ -58,29 +58,32 @@ class MarkdownToPdf:
 
         self.modules = []
 
-        for name in moduleStrings:
-            self.modules.append(ClassLoader.getInstance(name))
+        for name in self.moduleStrings:
+            self.compiler.addModule(ClassLoader.importClass(name)())
 
 
-    def createPdf(inputFile, outputFile):
+    def createPdf(self,inputFile, outputFile):
         ''' use loaded transposers to create a pdf from a .emd file '''
 
 
         if not isinstance(inputFile, str) or not isinstance(outputFile, str):
             raise AttributeError("both inputFile and outputFile must be a string")
 
-        if not self.pdfGenerator or not self.compiler or not self.modules:
+        if not self.pdfGenerator or not self.compiler :
             raise AttributeError("Class not properly initialised, please use loadProperties, loadModuleNames and loadProperties")
 
-        if inputFile[:-4] != ".emd":
+        if inputFile[-4:len(inputFile)] != ".emd":
             raise AttributeError("input file must be of .emd file type")
 
-        if outputFile[:-4] != ".pdf":
-            outputFile.append(".pdf")
+        if outputFile[-4:len(outputFile)] != ".pdf":
+            outputFile += ".pdf"
 
         html = ""
 
         with open(inputFile) as emdFile:
+
             html = self.compiler.compile(emdFile.read())
+
+        print("html = " + html)
 
         self.pdfGenerator.generatePdf(outputFile, html)

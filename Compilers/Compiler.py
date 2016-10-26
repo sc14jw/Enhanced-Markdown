@@ -6,7 +6,7 @@ from Modules.ModuleManager import ModuleManager
 
 ''' Generic Compiler class '''
 class Compiler:
-    def __init__(self, manager):
+    def __init__(self, manager=None):
         self.manager = manager
 
         if not self.manager:

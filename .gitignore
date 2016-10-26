@@ -5,3 +5,4 @@
 *.pdf
 *.json
 *.emd
+.DS_Store
