@@ -81,8 +81,13 @@ class ReferenceModule(Module):
     def __init__(self):
         self.attrFormat = self.AttributeFormatter()
         self.REF_PREFIX = 'ref'
+        # A list of supported attribute types
         self.ATTR_TYPES = ['name', 'first name', 'last name', 'first initial', 'published', 'title', 'journal', 'volume',
                            'pages', 'url', 'accessed', 'authors', 'city', 'publisher', 'newspaper']
+
+        # The reference types along with the attributes they use with the string that comes before the attribute ('pre'), the string
+        # that comes after the attribute ('post'), the formatting/validation method to be called on an attribute ('function') and
+        # the pos of the attribute in the reference ('pos')
         self.REF_TYPES = {'website': {'attrs': {'last name': {'post': ', ', 'function': self.attrFormat.toUpper, 'pos': 1},
                                                 'first initial': {'post': '. ', 'function': self.attrFormat.toUpperLetter, 'pos': 2},
                                                 'published': {'pre': '(', 'post': '). ', 'function': self.attrFormat.isYear, 'pos': 3},
@@ -106,25 +111,53 @@ class ReferenceModule(Module):
                                                   'title': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 4},
                                                   'newspaper': {'pre':'<a style="text-decoration:none;font-style:italic;">',
                                                                 'post': '</a>. ', 'function': self.attrFormat.toUpper, 'pos': 5},
-                                                  'pages': {'pre': 'p. ', 'post': '.', 'function': self.attrFormat.isPages, 'pos': 6}}}
+                                                  'pages': {'pre': 'p. ', 'post': '.', 'function': self.attrFormat.isPages, 'pos': 6}}
+                                       },
+                          'onlinenewspaper': {'attrs': {'last name': {'post': ', ', 'function': self.attrFormat.toUpper, 'pos': 1},
+                                                        'first initial': {'post': '. ', 'function': self.attrFormat.toUpperLetter, 'pos': 2},
+                                                        'published': {'pre': '(', 'post': '). ', 'function': self.attrFormat.isYear, 'pos': 3},
+                                                        'title': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 4},
+                                                        'newspaper': {'pre':'<a style="text-decoration:none;font-style:italic;">',
+                                                                      'post': '</a>, ', 'function': self.attrFormat.toUpper, 'pos': 5},
+                                                        'pages': {'pre': '[online] p. ', 'post': '. ', 'function': self.attrFormat.isPages, 'pos': 6},
+                                                        'url': {'pre': 'Available at: ', 'post': ' ', 'function': self.attrFormat.generateRefLink, 'pos': 7},
+                                                        'accessed': {'pre': '[Accessed ', 'post': '].', 'function': self.attrFormat.formatDate, 'pos': 8}}
+                                             }
                          }
 
         assert set(self.ATTR_TYPES).issuperset(set([attr for ref_type in self.REF_TYPES
                                                for attr in self.REF_TYPES[ref_type]['attrs'].keys()]))
 
     def parseReference(self, attr_dict, ref_type):
+        attr_dict.update(self.extrapolateAttributes(attr_dict))
         attr_ordered = self.REF_TYPES[ref_type]['attrs'].keys()
         attr_ordered.sort(key=lambda attr: self.REF_TYPES[ref_type]['attrs'][attr]['pos'])
 
         attr_dict = {attr:self.REF_TYPES[ref_type]['attrs'][attr]['function'](attr_dict[attr])
                     if 'function' in self.REF_TYPES[ref_type]['attrs'][attr] else attr_dict[attr]
-                    for attr in attr_dict}
+                    for attr in attr_dict if attr in self.REF_TYPES[ref_type]['attrs']}
 
         reference = [self.REF_TYPES[ref_type]['attrs'][attr].get('pre', '') +
                      attr_dict.get(attr, "<No '" + attr + "'>") +
                      self.REF_TYPES[ref_type]['attrs'][attr].get('post', '')
                      for attr in attr_ordered]
         return '<p>' + ''.join(reference) + "</p>"
+
+    def extrapolateAttributes(self, attr_dict):
+        ex_dict = {}
+        if 'name' in attr_dict:
+            name = filter(lambda n: n != '', attr_dict['name'].split(' '))
+            if name:
+                if len(name) >= 1:
+                    ex_dict['first initial'] = name[0][0]
+                if len(name) >= 1 and len(name[0]) > 1:
+                    ex_dict['first name'] = name[0]
+                if len(name) == 2 and len(name[1]) > 1:
+                    ex_dict['last name'] = name[1]
+        return ex_dict
+
+
+
 
     def getCommands(self):
         return {"link" : "add a link into the document - can be optionally paramatised with [] to alter link text"}
@@ -198,12 +231,20 @@ if __name__ == '__main__':
     output = module.completeCommand("ref:website {last name:esc, first initial:k, published:2015, \
                                                   title:testtitle, journal:bookofsomething, volume:3, pages:24-36, \
                                                   url:www.test.com, accessed:23/07/2008}")
-    output += '\n'
+    output += '\n\n'
     output += module.completeCommand("ref:book {authors:fname1 sname1|fname2 sname2, published:2014, title:testtitle, \
                                                 city:Leeds, publisher:Some Book Publisher(tm), pages:134-146}")
-    output += '\n'
+    output += '\n\n'
     output += module.completeCommand("ref:newspaper {last name:esc, first initial:k, published:2015, \
                                                      title:testtitle, newspaper:the something times, pages:24-36}")
+    output += '\n\n'
+    output += module.completeCommand("ref:onlinenewspaper {last name:esc, first initial:k, published:2015, \
+                                                           title:testtitle, newspaper:the something times, pages:24-36, \
+                                                           url:www.test.com, accessed:23/07/2008}")
+    output += '\n\n'
+    output += module.completeCommand("ref:onlinenewspaper {name:kevin hodgson, published:2015, \
+                                                           title:testtitle, newspaper:the something times, pages:24-36, \
+                                                           url:www.test.com, accessed:23/07/2008}")
 
 
     print("output = " + str(output))
