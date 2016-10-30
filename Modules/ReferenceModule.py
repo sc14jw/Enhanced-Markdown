@@ -38,27 +38,62 @@ class ReferenceModule(Module):
             except ValueError:
                 raise ValueError("'" + num + "' is not convertable to int.")
 
+        def isPages(self, num):
+            if '-' not in num:
+                try:
+                    return str(int(num))
+                except ValueError:
+                    raise ValueError("'" + num + "' is not convertable to int.")
+            else:
+                if num.count('-') != 1:
+                    raise ValueError("'num' does not match the format '<num>' or '<num>-<num>'")
+                page_range = num.split('-')
+                try:
+                    return str(int(page_range[0])) + '-' + str(int(page_range[1]))
+                except ValueError:
+                    raise ValueError("Could not parse range values in '" + num + "' to int.")
+
         def toUpperLetter(self, char):
             if len(char) == 1:
                 return char.upper()
             else:
                 raise ValueError("'" + char + "' initial is not of length 1")
 
+        def parseAuthors(self, authors):
+            if authors:
+                authors = authors.split('|')
+                authors_str = ''
+                for num_of_authors, author in enumerate(authors):
+                    author_name = filter(lambda a: a != '', author.split(' '))
+                    if len(author_name) != 2:
+                        raise ValueError("'" + author + "' does not match the format '<first name> <last name>'")
+                    authors_str += self.toUpper(author_name[1]) + ', ' + self.toUpperLetter(author_name[0][0]) + '.'
+                    authors_str += ' and ' if num_of_authors + 2 == len(authors) else ', ' if num_of_authors + 1 != len(authors) else ''
+                return authors_str
+            return "<No 'authors'>"
+
     def __init__(self):
         self.attrFormat = self.AttributeFormatter()
         self.REF_PREFIX = 'ref'
         self.ATTR_TYPES = ['name', 'first name', 'last name', 'first initial', 'published', 'title', 'journal', 'volume',
-                      'pages', 'url', 'accessed']
+                           'pages', 'url', 'accessed', 'authors', 'city', 'publisher']
         self.REF_TYPES = {'website': {'attrs': {'last name': {'post': ', ', 'function': self.attrFormat.toUpper, 'pos': 1},
                                                 'first initial': {'post': '. ', 'function': self.attrFormat.toUpperLetter, 'pos': 2},
                                                 'published': {'pre': '(', 'post': '). ', 'function': self.attrFormat.isYear, 'pos': 3},
                                                 'title': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 4},
                                                 'journal': {'post': ', ', 'function': self.attrFormat.toUpper, 'pos': 5},
                                                 'volume': {'pre': '[online] Volume ', 'post': ', ', 'pos': 6},
-                                                'pages': {'pre': 'p. ', 'post': '. ', 'function': self.attrFormat.isInt, 'pos': 7},
+                                                'pages': {'pre': 'p. ', 'post': '. ', 'function': self.attrFormat.isPages, 'pos': 7},
                                                 'url': {'pre': 'Available at: ', 'post': ' ', 'function': self.attrFormat.generateRefLink, 'pos': 8},
                                                 'accessed': {'pre': '[Accessed ', 'post': '].', 'function': self.attrFormat.formatDate, 'pos': 9}}
-                                     }
+                                     },
+                          'book': {'attrs': {'authors': {'post': ' ', 'function': self.attrFormat.parseAuthors, 'pos': 1},
+                                             'published': {'pre': '(', 'post': '). ', 'function': self.attrFormat.isYear, 'pos': 2},
+                                             'title': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 3},
+                                             'city': {'post': ': ', 'function': self.attrFormat.toUpper, 'pos': 4},
+                                             'publisher': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 5},
+                                             'pages': {'pre': 'p. ', 'post': '.', 'function': self.attrFormat.isPages, 'pos': 7}}
+                                  }
                          }
 
         assert set(self.ATTR_TYPES).issuperset(set([attr for ref_type in self.REF_TYPES
@@ -147,12 +182,12 @@ class ReferenceModule(Module):
 
 if __name__ == '__main__':
     module = ReferenceModule()
-    #output = module.completeCommand("ref:website {last name:Hodgson, first initial:K, published:23/07/15, \
-    #                                               title:testtitle, journal:bookofsomething, volume:3, pages:24, url:www.test.com, \
-    #                                               accessed:24/07/15}")
     output = module.completeCommand("ref:website {last name:esc, first initial:k, published:2015, \
-                                                  title:testtitle, journal:bookofsomething, volume:3, pages:24, \
+                                                  title:testtitle, journal:bookofsomething, volume:3, pages:24-36, \
                                                   url:www.test.com, accessed:23/07/2008}")
+    output += '\n'
+    output += module.completeCommand("ref:book {authors:fname1 sname1|fname2 sname2, published:2014, title:testtitle, \
+                                      city:Leeds, publisher:Some Book Publisher(tm), pages:134-146}")
 
 
     print("output = " + str(output))
