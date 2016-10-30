@@ -30,7 +30,13 @@ class ReferenceModule(Module):
             return self.linksmodule.completeCommand("link(" + link + ")")
 
         def toUpper(self, string):
-            return '' if len(string) == 0 else string[0].upper() if len(string) == 1 else string[0].upper() + string[1:]
+            words = filter(lambda a: a != '', string.split(' '))
+            if len(words) <= 1:
+                return '' if len(string) == 0 else string[0].upper() if len(string) == 1 else string[0].upper() + string[1:]
+            else:
+                return ' '.join(['' if len(string) == 0 else word[0].upper()
+                                 if len(string) == 1 else word[0].upper() + word[1:]
+                                 for word in words])
 
         def isInt(self, num):
             try:
@@ -76,7 +82,7 @@ class ReferenceModule(Module):
         self.attrFormat = self.AttributeFormatter()
         self.REF_PREFIX = 'ref'
         self.ATTR_TYPES = ['name', 'first name', 'last name', 'first initial', 'published', 'title', 'journal', 'volume',
-                           'pages', 'url', 'accessed', 'authors', 'city', 'publisher']
+                           'pages', 'url', 'accessed', 'authors', 'city', 'publisher', 'newspaper']
         self.REF_TYPES = {'website': {'attrs': {'last name': {'post': ', ', 'function': self.attrFormat.toUpper, 'pos': 1},
                                                 'first initial': {'post': '. ', 'function': self.attrFormat.toUpperLetter, 'pos': 2},
                                                 'published': {'pre': '(', 'post': '). ', 'function': self.attrFormat.isYear, 'pos': 3},
@@ -92,8 +98,15 @@ class ReferenceModule(Module):
                                              'title': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 3},
                                              'city': {'post': ': ', 'function': self.attrFormat.toUpper, 'pos': 4},
                                              'publisher': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 5},
-                                             'pages': {'pre': 'p. ', 'post': '.', 'function': self.attrFormat.isPages, 'pos': 7}}
-                                  }
+                                             'pages': {'pre': 'p. ', 'post': '.', 'function': self.attrFormat.isPages, 'pos': 6}}
+                                  },
+                          'newspaper': {'attrs': {'last name': {'post': ', ', 'function': self.attrFormat.toUpper, 'pos': 1},
+                                                  'first initial': {'post': '. ', 'function': self.attrFormat.toUpperLetter, 'pos': 2},
+                                                  'published': {'pre': '(', 'post': '). ', 'function': self.attrFormat.isYear, 'pos': 3},
+                                                  'title': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 4},
+                                                  'newspaper': {'pre':'<a style="text-decoration:none;font-style:italic;">',
+                                                                'post': '</a>. ', 'function': self.attrFormat.toUpper, 'pos': 5},
+                                                  'pages': {'pre': 'p. ', 'post': '.', 'function': self.attrFormat.isPages, 'pos': 6}}}
                          }
 
         assert set(self.ATTR_TYPES).issuperset(set([attr for ref_type in self.REF_TYPES
@@ -187,7 +200,10 @@ if __name__ == '__main__':
                                                   url:www.test.com, accessed:23/07/2008}")
     output += '\n'
     output += module.completeCommand("ref:book {authors:fname1 sname1|fname2 sname2, published:2014, title:testtitle, \
-                                      city:Leeds, publisher:Some Book Publisher(tm), pages:134-146}")
+                                                city:Leeds, publisher:Some Book Publisher(tm), pages:134-146}")
+    output += '\n'
+    output += module.completeCommand("ref:newspaper {last name:esc, first initial:k, published:2015, \
+                                                     title:testtitle, newspaper:the something times, pages:24-36}")
 
 
     print("output = " + str(output))
