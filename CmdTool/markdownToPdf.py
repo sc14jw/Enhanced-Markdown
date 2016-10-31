@@ -75,8 +75,8 @@ class MarkdownToPdf:
         if inputFile[-4:len(inputFile)] != ".emd":
             raise AttributeError("input file must be of .emd file type")
 
-        if outputFile[-4:len(outputFile)] != ".pdf":
-            outputFile += ".pdf"
+        if outputFile[-4:len(outputFile)] == ".pdf":
+            outputFile = outputFile[:-4]
 
         html = ""
 
