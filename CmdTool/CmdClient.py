@@ -3,7 +3,7 @@ import sys
 
 from ClassLoader.classLoader import ClassLoader
 
-class MarkdownToPdf:
+class CmdClient:
     ''' Class to handle the commandline input for markdown-pdf conversion '''
 
     def __init__ (self):

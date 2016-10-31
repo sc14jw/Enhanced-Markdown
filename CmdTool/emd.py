@@ -3,7 +3,7 @@ import argparse
 
 sys.path.append(".")
 
-from CmdTool.markdownToPdf import MarkdownToPdf
+from CmdTool.CmdClient import CmdClient
 
 
 if __name__ == '__main__':
@@ -15,6 +15,6 @@ if __name__ == '__main__':
     inputName = sys.argv[1]
     outputName = sys.argv[2]
 
-    markdownToPdf = MarkdownToPdf()
+    cmdClient = CmdClient()
 
-    markdownToPdf.createPdf(inputName, outputName)
+    cmdClient.createPdf(inputName, outputName)
