@@ -87,3 +87,15 @@ class CmdClient:
         print("html = " + html)
 
         self.pdfGenerator.generatePdf(outputFile, html)
+
+
+    def addCss(self, cssFile):
+        ''' add a css file to the compiler '''
+
+        if not isinstance(cssFile, str):
+            raise AttributeError("cssFile must be a string")
+
+        if cssFile[-4:len(cssFile)] != ".css":
+            raise AttributeError("cssFile must end in '.css'")
+
+        self.pdfGenerator.addStylesheet(cssFile)

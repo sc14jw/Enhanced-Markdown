@@ -23,10 +23,10 @@ class DefaultGenerator(PdfGenerator):
 
     def addStylesheet(self,filename):
 
-        if (not filename is str):
+        if (not isinstance(filename, str)):
             raise AttributeError("filename must be a string")
 
-        self.styleSheet = CSS(filename=filename + ".css")
+        self.styleSheet = CSS(filename=filename)
 
 
 if __name__ == '__main__':
