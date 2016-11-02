@@ -4,7 +4,7 @@ import sys
 sys.path.append(".")
 
 from Modules.ModuleManager import ModuleManager
-from MockModule import MockModule
+from Modules.MockModule import MockModule
 from Modules.LinksModule import LinksModule
 
 ''' Class to test the functionality of the ModuleManager class '''

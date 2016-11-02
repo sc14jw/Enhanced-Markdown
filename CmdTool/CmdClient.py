@@ -99,3 +99,43 @@ class CmdClient:
             raise AttributeError("cssFile must end in '.css'")
 
         self.pdfGenerator.addStylesheet(cssFile)
+
+    def addModule(self, module):
+        ''' add a module to the compiler '''
+
+        if not isinstance(module,str):
+            raise AttributeError("module must be a string")
+
+        print("adding module: " + module)
+
+        data = ""
+
+        with open(self.filename) as moduleFile:
+
+            data = json.load(moduleFile)
+            data["modules"].append(module)
+
+        with open(self.filename,'w') as moduleFile:
+
+            moduleFile.write("")
+            json.dump(data,moduleFile)
+
+    def removeModule(self, module):
+        ''' remove a module from the compiler '''
+
+        if not isinstance(module,str):
+            raise AttributeError("module must be a string")
+
+        print("removing module: " + module)
+
+        data = ""
+
+        with open(self.filename) as moduleFile:
+
+            data = json.load(moduleFile)
+            data["modules"].remove(module)
+
+        with open(self.filename,'w') as moduleFile:
+
+            moduleFile.write("")
+            json.dump(data,moduleFile)
