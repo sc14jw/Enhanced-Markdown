@@ -83,7 +83,7 @@ class ReferenceModule(Module):
         self.REF_PREFIX = 'ref'
         # A list of supported attribute types
         self.ATTR_TYPES = ['name', 'first name', 'last name', 'first initial', 'published', 'title', 'journal', 'volume',
-                           'pages', 'url', 'accessed', 'authors', 'city', 'publisher', 'newspaper']
+                           'pages', 'url', 'accessed', 'authors', 'city', 'publisher', 'newspaper', 'magazine']
 
         # The reference types along with the attributes they use with the string that comes before the attribute ('pre'), the string
         # that comes after the attribute ('post'), the formatting/validation method to be called on an attribute ('function') and
@@ -122,7 +122,17 @@ class ReferenceModule(Module):
                                                         'pages': {'pre': '[online] p. ', 'post': '. ', 'function': self.attrFormat.isPages, 'pos': 6},
                                                         'url': {'pre': 'Available at: ', 'post': ' ', 'function': self.attrFormat.generateRefLink, 'pos': 7},
                                                         'accessed': {'pre': '[Accessed ', 'post': '].', 'function': self.attrFormat.formatDate, 'pos': 8}}
-                                             }
+                                             },
+                          'magazine': {'attrs': {'last name': {'post': ', ', 'function': self.attrFormat.toUpper, 'pos': 1},
+                                                 'first initial': {'post': '. ', 'function': self.attrFormat.toUpperLetter, 'pos': 2},
+                                                  'published': {'pre': '(', 'post': '). ', 'function': self.attrFormat.isYear, 'pos': 3},
+                                                  'title': {'post': '. ', 'function': self.attrFormat.toUpper, 'pos': 4},
+                                                  'magazine': {'pre':'<a style="text-decoration:none;font-style:italic;">',
+                                                                'post': '</a>, ', 'function': self.attrFormat.toUpper, 'pos': 5},
+                                                  'volume': {'pre': '(', 'post': '), ', 'pos': 6},
+                                                  'pages': {'pre': 'p.', 'post': '. ', 'function': self.attrFormat.isPages, 'pos': 7}
+                                                 }
+                                      }
                          }
 
         assert set(self.ATTR_TYPES).issuperset(set([attr for ref_type in self.REF_TYPES
@@ -154,10 +164,10 @@ class ReferenceModule(Module):
                     ex_dict['first name'] = name[0]
                 if len(name) == 2 and len(name[1]) > 1:
                     ex_dict['last name'] = name[1]
+        elif 'first name' in attr_dict:
+            ex_dict['first initial'] = attr_dict['first name'][0]
+
         return ex_dict
-
-
-
 
     def getCommands(self):
         return {"link" : "add a link into the document - can be optionally paramatised with [] to alter link text"}
@@ -242,9 +252,9 @@ if __name__ == '__main__':
                                                            title:testtitle, newspaper:the something times, pages:24-36, \
                                                            url:www.test.com, accessed:23/07/2008}")
     output += '\n\n'
-    output += module.completeCommand("ref:onlinenewspaper {name:kevin hodgson, published:2015, \
-                                                           title:testtitle, newspaper:the something times, pages:24-36, \
-                                                           url:www.test.com, accessed:23/07/2008}")
+    output += module.completeCommand("ref:magazine {first name:kevin, last name:hodgson, published:2015, \
+                                                    title:testtitle, magazine:the something mag, volume:43, \
+                                                    pages:24-36}")
 
 
     print("output = " + str(output))
