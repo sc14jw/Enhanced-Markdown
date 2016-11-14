@@ -16,6 +16,8 @@ def addStyleSheet(cmdClient):
     inputName = sys.argv[3]
     outputName = sys.argv[4]
 
+    cmdClient.loadModuleNames()
+    cmdClient.loadModules()
     cmdClient.createPdf(inputName, outputName)
 
 
@@ -44,6 +46,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     cmdClient = CmdClient()
+    cmdClient.loadProperties()
 
 
     if len(sys.argv) > 2:
@@ -55,6 +58,9 @@ if __name__ == '__main__':
                 FLAGS[key](cmdClient)
 
                 sys.exit(0)
+
+    cmdClient.loadModuleNames()
+    cmdClient.loadModules()
 
     inputName = sys.argv[1]
     outputName = sys.argv[2]

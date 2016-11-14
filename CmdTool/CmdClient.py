@@ -6,14 +6,6 @@ from ClassLoader.classLoader import ClassLoader
 class CmdClient:
     ''' Class to handle the commandline input for markdown-pdf conversion '''
 
-    def __init__ (self):
-
-        self.loadProperties()
-        self.loadModuleNames(self.filename)
-        self.loadModules()
-
-
-
     def loadProperties(self, filename="properties.json"):
         ''' load properties for CmdTool '''
 
