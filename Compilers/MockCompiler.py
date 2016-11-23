@@ -1,4 +1,4 @@
-from Compilers.Compiler import Compilers
+from Compilers.Compiler import Compiler
 
 class MockCompiler (Compiler):
     ''' Mock compiler for testing other elements of the system '''

@@ -1,4 +1,4 @@
-from PdfGenerators.pdfGenerator import PdfGenerator
+from PdfGenerators.PdfGenerator import PdfGenerator
 
 class MockGenerator(PdfGenerator):
     ''' Mock generator for testing other classes '''
