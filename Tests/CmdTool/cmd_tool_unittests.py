@@ -16,8 +16,12 @@ class TestCmdTool (unittest.TestCase):
     def setUpClass(cls):
 
         cls.testData = {"compiler": "Compilers.MockCompiler.MockCompiler", "moduleFile": "modules.json", "generator": "PdfGenerators.MockGenerator.MockGenerator"}
+        cls.modules = {"modules": "Modules.MockModule.MockModule"}
 
-        cls.jsonNames = {"testJson": "test.json", "badJson": "badTest.json"}
+        cls.jsonNames = {"testJson": "test.json", "badJson": "badTest.json", "modulesJson": "modules.json", "badModules": "badModules.json"}
+
+        with open(cls.jsonNames["modulesJson"], "w") as dataFile:
+            json.dump(cls.modules, dataFile)
 
         with open("test.json", "w") as dataFile:
             json.dump(cls.testData, dataFile)
@@ -52,6 +56,32 @@ class TestCmdTool (unittest.TestCase):
 
         with self.assertRaises(AttributeError):
             self.cmdTool.loadProperties("test.txt")
+
+    def test_loadModuleStrings(self):
+
+        self.cmdTool.loadModuleNames()
+        self.assertEqual(self.cmdTool.moduleStrings, self.modules["modules"])
+
+    def test_loadModuleStringsBadJson(self):
+
+        badData = {"this is a test":"test"}
+
+        with open(self.jsonNames["badModules"], "w") as dataFile:
+            json.dump(badData, dataFile)
+
+        with self.assertRaises(KeyError):
+            self.cmdTool.loadModuleNames(self.jsonNames["badModules"])
+
+    def test_loadModuleStringsNoJson(self):
+
+        with self.assertRaises(FileNotFoundError):
+            self.cmdTool.loadModuleNames("noFile.json")
+
+    def test_loadModuleStringsNotJson(self):
+
+        with self.assertRaises(AttributeError):
+            self.cmdTool.loadModuleNames("test.txt")
+
     @classmethod
     def tearDownClass(cls):
 
