@@ -25,5 +25,25 @@ class TestCmdTool (unittest.TestCase):
         self.assertEqual(self.cmdTool.filename, self.testData["moduleFile"])
         self.assertTrue(isinstance(self.cmdTool.pdfGenerator, MockGenerator))
 
+    def test_loadProperiesBadJson(self):
+
+        badData = {"this is a test":"test"}
+
+        with open("badTest.json", "w") as dataFile:
+            json.dump(badData, dataFile)
+
+        with self.assertRaises(KeyError):
+            self.cmdTool.loadProperties("badTest.json")
+
+    def test_loadPropertiesNoFile(self):
+
+        with self.assertRaises(FileNotFoundError):
+            self.cmdTool.loadProperties("noFile.json")
+
+    def test_loadPropertiesNotJson(self):
+
+        with self.assertRaises(AttributeError):
+            self.cmdTool.loadProperties("test.txt")
+
 if __name__ == '__main__':
     unittest.main()
