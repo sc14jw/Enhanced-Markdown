@@ -88,7 +88,7 @@ class TestCmdTool (unittest.TestCase):
     def test_loadModules(self):
 
         self.cmdTool.loadProperties(self.jsonNames["testJson"])
-        self.cmdTool.loadModuleNames("modules.json")
+        self.cmdTool.loadModuleNames(self.jsonNames["modulesJson"])
         self.cmdTool.loadModules()
 
         self.assertTrue(self.cmdTool.modules != None, "cmdTool module list should not be None")
@@ -132,7 +132,6 @@ class TestCmdTool (unittest.TestCase):
             os.remove(value)
 
         os.remove("emdTest.emd")
-        os.remove("emdTest.pdf")
 
 
 if __name__ == '__main__':
