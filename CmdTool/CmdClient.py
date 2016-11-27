@@ -6,6 +6,12 @@ from ClassLoader.classLoader import ClassLoader
 class CmdClient:
     ''' Class to handle the commandline input for markdown-pdf conversion '''
 
+    def __init__(self):
+
+        self.moduleStrings = None
+        self.compiler = None
+        self.pdfGenerator = None
+
     def loadProperties(self, filename="properties.json"):
         ''' load properties for CmdTool '''
 
@@ -73,7 +79,6 @@ class CmdClient:
         html = ""
 
         with open(inputFile) as emdFile:
-
             html = self.compiler.compile(emdFile.read())
 
         print("html = " + html)
