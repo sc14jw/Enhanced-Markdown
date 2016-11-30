@@ -29,6 +29,9 @@ class TestCmdTool (unittest.TestCase):
         with open("emdTest.emd", "w") as dataFile:
             dataFile.write("this is a test")
 
+        with open("emdTest.css", "w") as dataFile:
+            dataFile.write("*\n{\nfont-family=\"sans-serif\"\n}")
+
     def setUp(self):
         self.cmdTool = CmdClient()
 
@@ -123,7 +126,36 @@ class TestCmdTool (unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.cmdTool.createPdf("emdTest.emd", "emdTest")
 
+    def test_addCss(self):
 
+        self.cmdTool.loadProperties(self.jsonNames["testJson"])
+        self.cmdTool.addCss("emdTest.css")
+
+        self.assertEqual(self.cmdTool.pdfGenerator.stylesheet, "emdTest.css", "stylesheet did not equal emdTest.css")
+
+    def test_addCssNotCssFile(self):
+
+        self.cmdTool.loadProperties(self.jsonNames["testJson"])
+
+        with self.assertRaises(AttributeError):
+            self.cmdTool.addCss("test.txt")
+
+    def test_addCssEmptyFile(self):
+
+        with open("empty.css","w") as dataFile:
+            dataFile.write("")
+
+        self.cmdTool.loadProperties(self.jsonNames["testJson"])
+        self.cmdTool.addCss("empty.css")
+
+        self.assertEqual(self.cmdTool.pdfGenerator.stylesheet, "empty.css", "stylesheet did not equal empty.css")
+
+        os.remove("empty.css")
+
+    def test_addCssNoProperties(self):
+
+        with self.assertRaises(AttributeError):
+            self.cmdTool.addCss("emdTest.css")
 
     @classmethod
     def tearDownClass(cls):
@@ -132,6 +164,7 @@ class TestCmdTool (unittest.TestCase):
             os.remove(value)
 
         os.remove("emdTest.emd")
+        os.remove("emdTest.css")
 
 
 if __name__ == '__main__':

@@ -6,3 +6,7 @@ class MockGenerator(PdfGenerator):
     def generatePdf(self, filename, text):
 
         return text
+
+    def addStylesheet(self, stylesheet):
+
+        self.stylesheet = stylesheet

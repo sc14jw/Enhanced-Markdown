@@ -6,3 +6,7 @@ class PdfGenerator:
     def generatePdf(self,filename,text):
 
         raise NotImplemented("Please use an extension of PdfGenerator")
+
+    def addStylesheet(self,css):
+
+        raise NotImplemented("Please use an extension of PdfGenerator")
