@@ -18,7 +18,21 @@ class TestCmdTool (unittest.TestCase):
         cls.testData = {"compiler": "Compilers.MockCompiler.MockCompiler", "moduleFile": "modulesTest.json", "generator": "PdfGenerators.MockGenerator.MockGenerator"}
         cls.modules = {"modules": ["Modules.MockModule.MockModule"]}
 
-        cls.jsonNames = {"testJson": "test.json", "badJson": "badTest.json", "modulesJson": "modulesTest.json", "badModules": "badModules.json"}
+
+        cls.emptyModules = {"modules": []}
+        cls.removeModulesData = {"compiler": "Compilers.MockCompiler.MockCompiler", "moduleFile": "removeModules.json",
+                                 "generator": "PdfGenerators.MockGenerator.MockGenerator"}
+        cls.jsonNames = {"testJson": "test.json", "badJson": "badTest.json", "modulesJson": "modulesTest.json", "badModules": "badModules.json",
+                         "removeModulesProperties": "removeModulesProperties.json", "removeModules": "removeModules.json"}
+
+        with open (cls.jsonNames["removeModulesProperties"], "w") as dataFile:
+            json.dump(cls.removeModulesData, dataFile)
+
+        with open (cls.jsonNames["removeModules"], "w") as dataFile:
+            json.dump(cls.emptyModules, dataFile)
+
+        with open(cls.jsonNames["testJson"], "w") as dataFile:
+            json.dump(cls.testData, dataFile)
 
         with open(cls.jsonNames["modulesJson"], "w") as dataFile:
             json.dump(cls.modules, dataFile)
@@ -156,6 +170,23 @@ class TestCmdTool (unittest.TestCase):
 
         with self.assertRaises(AttributeError):
             self.cmdTool.addCss("emdTest.css")
+
+    def test_addModule(self):
+
+        self.cmdTool.loadProperties(self.jsonNames["removeModulesProperties"])
+        self.cmdTool.addModule("Modules.Module.Module")
+
+        with open(self.jsonNames["removeModules"]) as dataFile:
+            self.assertEqual(json.load(dataFile)["modules"][0], "Modules.Module.Module")
+
+        with open (self.jsonNames["removeModules"], "w") as dataFile:
+            dataFile.write("")
+            json.dump(self.emptyModules, dataFile)
+
+    def test_addModuleNoProperties(self):
+
+        with self.assertRaises(AttributeError):
+            self.cmdTool.addModule("Modules.Module.Module")
 
     @classmethod
     def tearDownClass(cls):
