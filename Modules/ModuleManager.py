@@ -33,8 +33,8 @@ class ModuleManager:
         elif not module in self._modules:
             return
 
-        else:
-            self._modules.remove(module)
+
+        self._modules.remove(module)
 
 
     ''' complete a given module command '''
@@ -63,10 +63,10 @@ class ModuleManager:
 
                 command = commandLine[0:commandLine.find(')') + 1]
 
-            else:
+            elif commandLine.find(']') != -1:
                 command = commandLine[0:commandLine.find(']') + 1]
 
-            output = ""
+            output = commandLine
 
             for module in self._modules:
 
@@ -77,12 +77,7 @@ class ModuleManager:
                     output = module.completeCommand(command)
                     break
 
-            # Check that we actually have some output - actually had a module to handle given command
-            if not output:
-                newText += commandLine
-
-            else:
-                newText += commandLine.replace(command, output)
+            newText += commandLine.replace(command, output)
 
 
         if newText:
@@ -101,8 +96,6 @@ class ModuleManager:
     def getModuleCommands(self):
 
         if self._modules == None:
-            commands = None
-        else:
-            commands = [module.getCommands() for module in self._modules]
+            return None
 
-        return commands
+        return [module.getCommands() for module in self._modules]
