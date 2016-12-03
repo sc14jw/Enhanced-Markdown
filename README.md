@@ -20,4 +20,5 @@ add to the compiler. These commands always start with a '@' symbol and utilise '
 ```
 
 ## Contributors
-Jack Wainwright - jack.wainwright96@gmail.com [Project Owner]
+- Jack Wainwright - jack.wainwright96@gmail.com [Project Owner]
+- Kevin Hodgson - Creator of the Referencing Module
