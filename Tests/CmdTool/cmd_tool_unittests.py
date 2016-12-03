@@ -188,6 +188,30 @@ class TestCmdTool (unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.cmdTool.addModule("Modules.Module.Module")
 
+    def test_removeModule(self):
+
+        self.cmdTool.loadProperties(self.jsonNames["removeModulesProperties"])
+        self.cmdTool.addModule("Modules.Module.Module")
+
+        self.cmdTool.removeModule("Modules.Module.Module")
+
+        with open(self.jsonNames["removeModules"]) as dataFile:
+            self.assertEqual(json.load(dataFile)["modules"], [])
+
+        with open (self.jsonNames["removeModules"], "w") as dataFile:
+            dataFile.write("")
+            json.dump(self.emptyModules, dataFile)
+
+    def test_removeModuleNoProperties(self):
+
+        with self.assertRaises(AttributeError):
+            self.cmdTool.removeModule("Modules.Module.Module")
+
+    def test_removeModuleModuleNotExist(self):
+
+        self.cmdTool.loadProperties(self.jsonNames["removeModulesProperties"])
+        self.cmdTool.removeModule("Modules.Module.Module")
+
     @classmethod
     def tearDownClass(cls):
 

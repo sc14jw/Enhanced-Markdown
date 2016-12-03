@@ -130,7 +130,13 @@ class CmdClient:
         with open(self.filename) as moduleFile:
 
             data = json.load(moduleFile)
-            data["modules"].remove(module)
+
+            try:
+                data["modules"].remove(module)
+
+            except ValueError as error:
+                # this is ok, just means module wasn't in the list
+                pass
 
         with open(self.filename,'w') as moduleFile:
 
