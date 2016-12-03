@@ -1,7 +1,7 @@
 import json
 import sys
 
-from ClassLoader.classLoader import ClassLoader
+from ClassLoader.ClassLoader import ClassLoader
 
 class CmdClient:
     ''' Class to handle the commandline input for markdown-pdf conversion '''
