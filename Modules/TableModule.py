@@ -27,7 +27,7 @@ class TableModule(Module):
         return {"table": "create a new table or close a currently open table - can optionally use [<id>]",
                 "row": "create a new row or close a currently open row",
                 "column": "create a new column or close a currently open column - can optionally use [<colSpan>, <rowSpan>]",
-                "section": "create a new section or close a currently open section - requires the parameter head or body relating to the section to interact with"
+                "section": "create a new section or close a currently open section - requires the parameter head or body relating to the section to interact with",
                 "header": "create a new column header or close a currently open header"}
 
 
