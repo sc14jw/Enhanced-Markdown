@@ -16,7 +16,15 @@ class DefaultCompiler(Compiler):
             if(line == ""):
                 continue
 
+            originalLine = line
+
             line = super().moduleCommand(line)
+
+            if line != originalLine:
+
+                html += line
+                continue
+            
 
             found = False
 
