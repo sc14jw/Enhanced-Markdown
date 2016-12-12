@@ -9,3 +9,4 @@ script:
   - "python Tests/CompilerTests/compiler_unittests.py"
   - "python Tests/ModuleTests/module_manager_unit_tests.py"
   - "python Tests/CmdTool/cmd_tool_unittests.py"
+  - "python Tests/ModuleTests/table_module_unit_tests.py"

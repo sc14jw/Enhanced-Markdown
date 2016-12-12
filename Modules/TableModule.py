@@ -43,7 +43,7 @@ class TableModule(Module):
 
         if '[' in self.command:
 
-            return "<table id=" + self.command[self.command.find('[') + 1 :self.command.find(']')] + ">"
+            return "<table id='" + self.command[self.command.find('[') + 1 :self.command.find(']')] + "'>"
 
         return "<table>"
 
@@ -75,11 +75,11 @@ class TableModule(Module):
             parameters = self.command[self.command.find('[') + 1: self.command.find(']')]
             parameters = parameters.split(',')
 
-            if parameters.size() == 1:
+            if len(parameters) == 1:
                 return "<td colspan=" + parameters[0] + ">"
 
 
-            return "<td colspan=" + parameters[0] + "rowspan=" + parameters[1] + ">"
+            return "<td colspan=" + parameters[0] + " rowspan=" + parameters[1] + ">"
 
         return "<td>"
 
@@ -87,8 +87,6 @@ class TableModule(Module):
         ''' create/close a given section '''
 
         parameter = self.command[self.command.find('(') + 1 : self.command.find(')')]
-
-        print("parameter = " + parameter)
 
         if not (parameter == "body" or parameter == "head"):
             raise AttributeError(parameter + " not supported as a section. Please use either head or body")
@@ -112,6 +110,7 @@ class TableModule(Module):
         return "<thead>"
 
     def header(self):
+        ''' create/colse a header element '''
 
         if self.headerOpen:
 
