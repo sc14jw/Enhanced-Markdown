@@ -39,6 +39,8 @@ class TableModule(Module):
             self.tableOpen = False
             return "</table>"
 
+        self.tableOpen = True
+
         if '[' in self.command:
 
             return "<table id=" + self.command[self.command.find('[') + 1 :self.command.find(']')] + ">"
@@ -54,6 +56,7 @@ class TableModule(Module):
             self.openRow = False
             return "</tr>"
 
+        self.openRow = True
         return "<tr>"
 
 
@@ -64,6 +67,8 @@ class TableModule(Module):
 
             self.openCol = False
             return "</td>"
+
+        self.openCol = True
 
         if '[' in self.command:
 
@@ -95,6 +100,7 @@ class TableModule(Module):
                 self.bodyOpen = False
                 return "</tbody>"
 
+            self.bodyOpen = True
             return "<tbody>"
 
         if self.headOpen:
@@ -102,6 +108,7 @@ class TableModule(Module):
             self.headOpen = False
             return "</thead>"
 
+        self.headOpen = True
         return "<thead>"
 
     def header(self):
@@ -111,4 +118,5 @@ class TableModule(Module):
             self.headerOpen = False
             return "</th>"
 
+        self.headerOpen = True
         return "<th>"
