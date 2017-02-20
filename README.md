@@ -1,4 +1,4 @@
-# MarkdownTest
+# Enhanced Markdown
 This project aims to create a framework allowing for the creation of a pdf using a markdown like syntax. The framework also
 allows for new commands to be dynamically added to a compiler through the idea of modules. Through the additional functionality
 which can be dynamically added to a compiler through the modules system the framework hopes to provide an easy way to write reports
