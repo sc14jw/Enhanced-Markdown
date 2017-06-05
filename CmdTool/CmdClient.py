@@ -2,15 +2,20 @@ import json
 import sys
 
 from ClassLoader.ClassLoader import ClassLoader
+from Compilers.DefaultCompiler import DefaultCompiler
+from PdfGenerators.DefaultGenerator import DefaultGenerator
+
+DEFAULT_COMPILER = "Compilers.DefaultCompiler.DefaultCompiler"
+DEFAULT_GENERATOR = "PdfGenerators.DefaultGenerator.DefaultGenerator"
 
 class CmdClient:
     ''' Class to handle the commandline input for markdown-pdf conversion '''
 
     def __init__(self):
 
-        self.moduleStrings = None
-        self.compiler = None
-        self.pdfGenerator = None
+        self.moduleStrings = ["Modules.LinksModule.LinksModule"]
+        self.compiler = DefaultCompiler()
+        self.pdfGenerator = DefaultGenerator()
 
     def loadProperties(self, filename="properties.json"):
         ''' load properties for CmdTool '''
@@ -20,16 +25,19 @@ class CmdClient:
 
         if filename[-5:] != ".json":
             raise AttributeError("filename must be a json file")
-
-        with open(filename) as jsonFile:
-
-            data = json.load(jsonFile)
-
-            self.filename = data["moduleFile"]
-
-            self.compiler = ClassLoader.importClass(data["compiler"])()
-
-            self.pdfGenerator = ClassLoader.importClass(data["generator"])()
+        
+        try:
+            with open(filename) as jsonFile:
+                data = json.load(jsonFile)
+                self.filename = data["moduleFile"]
+                self.compiler = ClassLoader.importClass(data["compiler"])()
+                self.pdfGenerator = ClassLoader.importClass(data["generator"])()
+                
+        except FileNotFoundError:
+            print("got here!!!!")
+            with open(filename, 'w') as jsonFile:
+               data = {"moduleFile": "modules.json", "compiler": DEFAULT_COMPILER, "generator": DEFAULT_GENERATOR}
+               json.dump(data, jsonFile)
 
 
     def loadModuleNames(self, filename="modules.json"):
@@ -40,12 +48,16 @@ class CmdClient:
 
         if filename[-5:] != ".json":
             raise AttributeError("filename must end in .json")
+        
+        try:
+            with open(filename) as jsonFile:
+                data = json.load(jsonFile)
+                self.moduleStrings = data["modules"]
 
-        with open(filename) as jsonFile:
-
-            data = json.load(jsonFile)
-
-            self.moduleStrings = data["modules"]
+        except FileNotFoundError:
+            with open(filename, 'w') as jsonFile:
+                data = {"modules": self.moduleStrings}
+                json.dump(data, jsonFile)
 
 
     def loadModules(self):
