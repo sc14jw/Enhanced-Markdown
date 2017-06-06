@@ -34,7 +34,6 @@ class CmdClient:
                 self.pdfGenerator = ClassLoader.importClass(data["generator"])()
                 
         except FileNotFoundError:
-            print("got here!!!!")
             with open(filename, 'w') as jsonFile:
                data = {"moduleFile": "modules.json", "compiler": DEFAULT_COMPILER, "generator": DEFAULT_GENERATOR}
                json.dump(data, jsonFile)

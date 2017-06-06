@@ -67,11 +67,6 @@ class TestCmdTool (unittest.TestCase):
         with self.assertRaises(KeyError):
             self.cmdTool.loadProperties(self.jsonNames["badJson"])
 
-    def test_loadPropertiesNoFile(self):
-
-        with self.assertRaises(FileNotFoundError):
-            self.cmdTool.loadProperties("noFile.json")
-
     def test_loadPropertiesNotJson(self):
 
         with self.assertRaises(AttributeError):
@@ -92,10 +87,6 @@ class TestCmdTool (unittest.TestCase):
         with self.assertRaises(KeyError):
             self.cmdTool.loadModuleNames(self.jsonNames["badModules"])
 
-    def test_loadModuleStringsNoJson(self):
-
-        with self.assertRaises(FileNotFoundError):
-            self.cmdTool.loadModuleNames("noFile.json")
 
     def test_loadModuleStringsNotJson(self):
 
@@ -109,11 +100,6 @@ class TestCmdTool (unittest.TestCase):
         self.cmdTool.loadModules()
 
         self.assertTrue(self.cmdTool.modules != None, "cmdTool module list should not be None")
-
-    def test_loadModulesNoModuleNames(self):
-
-        with self.assertRaises(AttributeError):
-            self.cmdTool.loadModules()
 
     def test_createPdf(self):
 
@@ -135,10 +121,6 @@ class TestCmdTool (unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.cmdTool.createPdf("test", "emdTest")
 
-    def test_createPdfNoProperties(self):
-
-        with self.assertRaises(AttributeError):
-            self.cmdTool.createPdf("emdTest.emd", "emdTest")
 
     def test_addCss(self):
 
@@ -165,11 +147,6 @@ class TestCmdTool (unittest.TestCase):
         self.assertEqual(self.cmdTool.pdfGenerator.stylesheet, "empty.css", "stylesheet did not equal empty.css")
 
         os.remove("empty.css")
-
-    def test_addCssNoProperties(self):
-
-        with self.assertRaises(AttributeError):
-            self.cmdTool.addCss("emdTest.css")
 
     def test_addModule(self):
 
